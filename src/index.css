@@ -1,7 +1,14 @@
 @import "tailwindcss";
+@import url('https://api.fontshare.com/v2/css?f[]=satoshi@400,500,600,700&display=swap');
 
 @layer base {
   *, *::before, *::after {
     box-sizing: border-box;
+  }
+}
+
+@layer utilities {
+  .font-satoshi {
+    font-family: 'Satoshi', sans-serif;
   }
 }
