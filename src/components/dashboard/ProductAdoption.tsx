@@ -1,4 +1,3 @@
-import { IconCalendar } from '@tabler/icons-react'
 import {
   BarChart,
   Bar,
@@ -10,6 +9,7 @@ import {
 } from 'recharts'
 import EmptyState from '../ui/EmptyState'
 import { productAdoptionData } from '../../data/mockData'
+import DateFilterButton from '../ui/DateFilterButton'
 
 interface ProductAdoptionProps {
   hasData: boolean
@@ -19,20 +19,14 @@ export default function ProductAdoption({ hasData }: ProductAdoptionProps) {
   return (
     <>
       {/* Header */}
-      <div className="flex items-start justify-between mb-6">
+      <div className="flex items-start justify-between pb-4 mb-6 border-b border-[#EAECF0]">
         <div>
           <h2 className="text-base font-bold text-gray-900">Product Adoption</h2>
           <p className="text-xs text-gray-400 mt-0.5">
             An insight into product feature adoption rate
           </p>
         </div>
-        <button
-          type="button"
-          className="flex items-center gap-1.5 text-xs text-gray-500 border border-gray-200 rounded-full px-3 py-1.5 hover:bg-gray-50 transition-colors whitespace-nowrap"
-        >
-          Date: <span className="text-orange-500 font-medium">Last 6 Month</span>
-          <IconCalendar size={13} className="text-gray-400" />
-        </button>
+        <DateFilterButton />
       </div>
 
       {/* Chart or Empty */}

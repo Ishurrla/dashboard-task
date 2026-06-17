@@ -1,5 +1,4 @@
 import { useState } from 'react'
-import { IconCalendar } from '@tabler/icons-react'
 import {
   LineChart,
   Line,
@@ -11,6 +10,7 @@ import {
 } from 'recharts'
 import EmptyState from '../ui/EmptyState'
 import { mrrData, churnRateData } from '../../data/mockData'
+import DateFilterButton from '../ui/DateFilterButton'
 
 const tabs = ['Monthly recurring revenue (MRR)', 'Churn rate'] as const
 type Tab = typeof tabs[number]
@@ -30,29 +30,26 @@ export default function DataInsight({ hasData }: DataInsightProps) {
       {/* Header */}
       <div className="flex items-start justify-between mb-5">
         <h2 className="text-base font-bold text-gray-900">Data Insight</h2>
-        <button
-          type="button"
-          className="flex items-center gap-1.5 text-xs text-gray-500 border border-gray-200 rounded-full px-3 py-1.5 hover:bg-gray-50 transition-colors whitespace-nowrap"
-        >
-          Date: <span className="text-orange-500 font-medium">Last 6 Month</span>
-          <IconCalendar size={13} className="text-gray-400" />
-        </button>
+        <DateFilterButton />
       </div>
 
       {/* Tabs */}
-      <div className="flex gap-6 border-b border-gray-100 mb-5">
+      <div className="flex gap-4 border-b border-gray-100 mb-4 overflow-x-auto">
         {tabs.map((tab) => (
           <button
             key={tab}
             type="button"
             onClick={() => setActiveTab(tab)}
-            className={`text-sm pb-3 border-b-2 transition-colors whitespace-nowrap -mb-px ${
+            className={`text-xs pb-2 border-b-2 transition-colors whitespace-nowrap ${
               activeTab === tab
                 ? 'border-orange-500 text-orange-500 font-medium'
                 : 'border-transparent text-gray-400 hover:text-gray-600'
             }`}
           >
-            {tab}
+            <span className="sm:hidden">
+              {tab === 'Monthly recurring revenue (MRR)' ? 'MRR' : 'Churn Rate'}
+            </span>
+            <span className="hidden sm:inline">{tab}</span>
           </button>
         ))}
       </div>
@@ -98,7 +95,7 @@ export default function DataInsight({ hasData }: DataInsightProps) {
                 }}
               />
               <Line
-                type="monotone"
+                type="linear"
                 dataKey="value"
                 stroke="#E8622A"
                 strokeWidth={2}

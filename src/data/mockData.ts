@@ -100,13 +100,14 @@ export const payrollRunData = {
   totalDisbursed: '₦130m',
   disbursedChange: '+₦20m vs 30 day ago',
   chart: [
-    { month: 'Jan', value: 22 }, { month: 'Jan', value: 25 }, { month: 'Jan', value: 21 },
-    { month: 'Feb', value: 26 }, { month: 'Feb', value: 30 }, { month: 'Feb', value: 28 },
-    { month: 'Mar', value: 29 }, { month: 'Mar', value: 33 }, { month: 'Mar', value: 31 },
-    { month: 'Apr', value: 32 }, { month: 'Apr', value: 37 }, { month: 'Apr', value: 35 },
-    { month: 'May', value: 36 }, { month: 'May', value: 41 }, { month: 'May', value: 39 },
-    { month: 'Jun', value: 40 }, { month: 'Jun', value: 45 }, { month: 'Jun', value: 43 },
+    { x: 1,  value: 22 }, { x: 2,  value: 25 }, { x: 3,  value: 23 }, { x: 4,  value: 26 }, { x: 5,  value: 24 },
+    { x: 6,  value: 27 }, { x: 7,  value: 29 }, { x: 8,  value: 27 }, { x: 9,  value: 30 }, { x: 10, value: 28 },
+    { x: 11, value: 31 }, { x: 12, value: 34 }, { x: 13, value: 32 }, { x: 14, value: 35 }, { x: 15, value: 33 },
+    { x: 16, value: 36 }, { x: 17, value: 39 }, { x: 18, value: 37 }, { x: 19, value: 40 }, { x: 20, value: 38 },
+    { x: 21, value: 41 }, { x: 22, value: 43 }, { x: 23, value: 41 }, { x: 24, value: 44 }, { x: 25, value: 42 },
+    { x: 26, value: 45 }, { x: 27, value: 43 }, { x: 28, value: 46 }, { x: 29, value: 44 }, { x: 30, value: 47 },
   ],
+  xLabels: ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun'],
 }
 
 export const employeeSelfServiceData = {
