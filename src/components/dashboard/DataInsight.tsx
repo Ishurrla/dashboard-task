@@ -9,28 +9,46 @@ import {
   ResponsiveContainer,
 } from 'recharts'
 import EmptyState from '../ui/EmptyState'
-import { mrrData, churnRateData } from '../../data/mockData'
 import DateFilterButton from '../ui/DateFilterButton'
+import type { DateFilter } from '../../api/dashboard'
 
 const tabs = ['Monthly recurring revenue (MRR)', 'Churn rate'] as const
 type Tab = typeof tabs[number]
 
-interface DataInsightProps {
-  hasData: boolean
+interface DataInsightData {
+  labels: string[]
+  series: {
+    mrr: number[]
+    churn_rate: number[]
+  }
 }
 
-export default function DataInsight({ hasData }: DataInsightProps) {
+interface DataInsightProps {
+  data?: DataInsightData
+  dateFilter: DateFilter
+  onDateFilterChange: (value: DateFilter) => void
+}
+
+export default function DataInsight({ data, dateFilter, onDateFilterChange }: DataInsightProps) {
   const [activeTab, setActiveTab] = useState<Tab>('Monthly recurring revenue (MRR)')
 
-  const chartData = activeTab === 'Monthly recurring revenue (MRR)' ? mrrData : churnRateData
-  const yLabel = activeTab === 'Monthly recurring revenue (MRR)' ? 'MRR in Million Naira (₦)' : 'Churn Rate (%)'
+  const isMRR = activeTab === 'Monthly recurring revenue (MRR)'
+  const seriesValues = isMRR ? data?.series.mrr : data?.series.churn_rate
+  const isEmpty = !data || !seriesValues || seriesValues.every(v => v === 0)
+
+  const chartData = (data?.labels ?? []).map((month, i) => ({
+    month,
+    value: seriesValues?.[i] ?? 0,
+  }))
+
+  const yLabel = isMRR ? 'MRR in Million Naira (₦)' : 'Churn Rate (%)'
 
   return (
-    <div className="border border-[#D0D5DD] rounded-xl p-5">
+    <div className="border border-[#D0D5DD] rounded-xl p-5 mt-6">
       {/* Header */}
       <div className="flex items-start justify-between mb-5">
         <h2 className="text-base font-bold text-gray-900">Data Insight</h2>
-        <DateFilterButton />
+        <DateFilterButton value={dateFilter} onChange={onDateFilterChange} />
       </div>
 
       {/* Tabs */}
@@ -55,9 +73,11 @@ export default function DataInsight({ hasData }: DataInsightProps) {
       </div>
 
       {/* Chart or Empty */}
-      {hasData ? (
-        <div className="h-64 w-full">
-          <ResponsiveContainer width="100%" height="100%">
+      {isEmpty ? (
+        <EmptyState />
+      ) : (
+        <div className="h-64 min-h-0 w-full">
+          <ResponsiveContainer width="100%" height={256}>
             <LineChart data={chartData} margin={{ top: 5, right: 16, left: 0, bottom: 20 }}>
               <CartesianGrid strokeDasharray="4 4" stroke="#F3F4F6" vertical={false} />
               <XAxis
@@ -105,8 +125,6 @@ export default function DataInsight({ hasData }: DataInsightProps) {
             </LineChart>
           </ResponsiveContainer>
         </div>
-      ) : (
-        <EmptyState />
       )}
     </div>
   )

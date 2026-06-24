@@ -8,14 +8,40 @@ import {
   ResponsiveContainer,
 } from 'recharts'
 import EmptyState from '../ui/EmptyState'
-import { productAdoptionData } from '../../data/mockData'
 import DateFilterButton from '../ui/DateFilterButton'
+import type { DateFilter } from '../../api/dashboard'
 
-interface ProductAdoptionProps {
-  hasData: boolean
+interface ProductAdoptionItem {
+  module: string
+  adoption_rate: number
 }
 
-export default function ProductAdoption({ hasData }: ProductAdoptionProps) {
+interface ProductAdoptionApiData {
+  chart: ProductAdoptionItem[]
+}
+
+interface ProductAdoptionProps {
+  data?: ProductAdoptionApiData
+  dateFilter: DateFilter
+  onDateFilterChange: (value: DateFilter) => void
+}
+
+export default function ProductAdoption({ data, dateFilter, onDateFilterChange }: ProductAdoptionProps) {
+  const isEmpty = !data || data.chart.every(item => item.adoption_rate === 0)
+
+  const abbreviations: Record<string, string> = {
+    'Employee Management': 'Emp. Mgmt',
+    'Wallet Management': 'Wallet',
+    'Payroll Management': 'Payroll',
+    'Leave Management': 'Leave',
+    'Performance Management': 'Performance',
+  }
+
+  const chartData = (data?.chart ?? []).map(item => ({
+    module: abbreviations[item.module] ?? item.module,
+    adoption: item.adoption_rate,
+  }))
+
   return (
     <>
       {/* Header */}
@@ -26,15 +52,16 @@ export default function ProductAdoption({ hasData }: ProductAdoptionProps) {
             An insight into product feature adoption rate
           </p>
         </div>
-        <DateFilterButton />
+        <DateFilterButton value={dateFilter} onChange={onDateFilterChange} />
       </div>
 
-      {/* Chart or Empty */}
-      {hasData ? (
-        <div className="h-72 w-full">
-          <ResponsiveContainer width="100%" height="100%">
+      {isEmpty ? (
+        <EmptyState />
+      ) : (
+        <div className="h-72 min-h-0 w-full">
+          <ResponsiveContainer width="100%" height={288}>
             <BarChart
-              data={productAdoptionData}
+              data={chartData}
               margin={{ top: 5, right: 16, left: 0, bottom: 24 }}
             >
               <CartesianGrid strokeDasharray="4 4" stroke="#F3F4F6" vertical={false} />
@@ -78,8 +105,6 @@ export default function ProductAdoption({ hasData }: ProductAdoptionProps) {
             </BarChart>
           </ResponsiveContainer>
         </div>
-      ) : (
-        <EmptyState />
       )}
     </>
   )

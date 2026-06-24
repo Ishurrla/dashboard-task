@@ -1,29 +1,21 @@
 import { Menu } from '@mantine/core'
 import { IconCalendar, IconCheck } from '@tabler/icons-react'
-import { useState } from 'react'
+import type { DateFilter } from '../../api/dashboard'
 
-const periods = [
-  'Last 3 Months',
-  'Last 6 Months',
-  'This Year',
-  'Last Year',
+const periodOptions: { label: string; value: DateFilter }[] = [
+  { label: 'Last 3 Months', value: '3 months' },
+  { label: 'Last 6 Months', value: 'this month' },
+  { label: 'This Year', value: 'this year' },
+  { label: 'Last Year', value: 'custom date' },
 ]
 
 interface DateFilterButtonProps {
-  value?: string
-  onChange?: (value: string) => void
+  value?: DateFilter
+  onChange?: (value: DateFilter) => void
 }
 
-export default function DateFilterButton({
-  value = 'Last 6 Months',
-  onChange,
-}: DateFilterButtonProps) {
-  const [selected, setSelected] = useState(value)
-
-  function handleSelect(period: string) {
-    setSelected(period)
-    onChange?.(period)
-  }
+export default function DateFilterButton({ value = '3 months', onChange = () => {} }: DateFilterButtonProps) {
+  const selectedLabel = periodOptions.find(p => p.value === value)?.label ?? 'Last 6 Months'
 
   return (
     <Menu shadow="md" width={160} position="bottom-end">
@@ -32,36 +24,33 @@ export default function DateFilterButton({
           type="button"
           className="flex items-center gap-1.5 border border-gray-200 rounded-full px-3 py-1.5 hover:bg-gray-50 transition-colors shrink-0"
         >
-          {/* Mobile: orange calendar icon only */}
           <IconCalendar size={14} className="text-orange-500 shrink-0 sm:hidden" />
-
-          {/* Tablet+: "Date:" label + selected + calendar icon in #344054 */}
           <span className="hidden sm:flex items-center gap-1.5 text-xs">
             <span className="text-[#344054] font-medium">Date:</span>
-            <span className="text-orange-500 font-medium">{selected}</span>
+            <span className="text-orange-500 font-medium">{selectedLabel}</span>
             <IconCalendar size={14} className="shrink-0" style={{ color: '#344054' }} />
           </span>
         </button>
       </Menu.Target>
 
       <Menu.Dropdown>
-        {periods.map((period) => (
+        {periodOptions.map((period) => (
           <Menu.Item
-            key={period}
-            onClick={() => handleSelect(period)}
+            key={period.value}
+            onClick={() => onChange(period.value)}
             rightSection={
-              selected === period ? (
+              value === period.value ? (
                 <IconCheck size={12} className="text-orange-500" />
               ) : null
             }
             styles={{
               item: {
                 fontSize: 12,
-                color: selected === period ? '#F97316' : undefined,
+                color: value === period.value ? '#F97316' : undefined,
               },
             }}
           >
-            {period}
+            {period.label}
           </Menu.Item>
         ))}
       </Menu.Dropdown>

@@ -7,11 +7,9 @@ import profileIcon from '../../assets/Icon-top3.svg'
 
 interface TopBarProps {
   onMenuClick: () => void
-  hasData: boolean
-  onToggleData: () => void
 }
 
-export default function TopBar({ onMenuClick, hasData, onToggleData }: TopBarProps) {
+export default function TopBar({ onMenuClick }: TopBarProps) {
   return (
     <div className="flex items-center justify-between px-3 md:px-6 py-3 bg-white border-b border-gray-200 min-w-0 gap-2">
       {/* Left */}
@@ -43,15 +41,7 @@ export default function TopBar({ onMenuClick, hasData, onToggleData }: TopBarPro
 
       {/* Right */}
       <div className="flex items-center gap-2 shrink-0">
-        <button
-          type="button"
-          onClick={onToggleData}
-          className="hidden sm:flex items-center gap-1.5 text-[11px] border border-gray-200 rounded-md px-2 py-1.5 hover:bg-gray-50 transition-colors shrink-0"
-        >
-          <span className={hasData ? 'text-green-600' : 'text-gray-400'}>●</span>
-          {hasData ? 'Filled' : 'Empty'}
-        </button>
-        <button type="button" aria-label="Notifications">
+<button type="button" aria-label="Notifications">
           <img src={iconNotification} alt="" aria-hidden="true" className="w-8 h-8 object-contain" />
         </button>
         <button type="button" aria-label="Search">
