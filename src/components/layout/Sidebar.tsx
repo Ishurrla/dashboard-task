@@ -49,7 +49,7 @@ export default function Sidebar({ isOpen, onClose }: SidebarProps) {
         </div>
 
         {/* Nav */}
-        <nav className="flex-1 px-3 py-2 overflow-y-auto">
+        <nav className="flex-1 px-3 py-2 overflow-y-auto [&::-webkit-scrollbar]:hidden scrollbar-none [-ms-overflow-style:none]">
           <p className="text-white/50 text-[10px] px-3 mb-3 uppercase tracking-widest font-medium">
             Main Menu
           </p>
