@@ -1,16 +1,16 @@
-import { useState } from 'react'
+import { NavLink as RouterNavLink } from 'react-router-dom'
 import logo from '../../assets/PaySteriod Logo.svg'
-import { IconChevronDown, IconLock } from '@tabler/icons-react'
+import { IconBell, IconChevronDown, IconClipboardList, IconCreditCard, IconFileText, IconHeadset, IconLayoutDashboard, IconLock, IconUserCog, IconUsers } from '@tabler/icons-react'
 
 const navItems = [
-  { label: 'Dashboard' },
-  { label: 'Client Management' },
-  { label: 'Subscription Management', hasChevron: true },
-  { label: 'User Management' },
-  { label: 'Support' },
-  { label: 'Notification' },
-  { label: 'Report' },
-  { label: 'Audit Trail' },
+  { label: 'Dashboard', icon: IconLayoutDashboard, path: '/' },
+  { label: 'Client Management', icon: IconUsers, path: '/client-management' },
+  { label: 'Subscription Management', icon: IconCreditCard, path: '/subscription-management', hasChevron: true },
+  { label: 'User Management', icon: IconUserCog, path: '/user-management' },
+  { label: 'Support', icon: IconHeadset, path: '/support' },
+  { label: 'Notification', icon: IconBell, path: '/notification' },
+  { label: 'Report', icon: IconFileText, path: '/report' },
+  { label: 'Audit Trail', icon: IconClipboardList, path: '/audit-trail' },
 ]
 
 interface SidebarProps {
@@ -19,7 +19,6 @@ interface SidebarProps {
 }
 
 export default function Sidebar({ isOpen, onClose }: SidebarProps) {
-  const [active, setActive] = useState('Dashboard')
 
   return (
     <>
@@ -55,29 +54,27 @@ export default function Sidebar({ isOpen, onClose }: SidebarProps) {
           </p>
 
           {navItems.map((item) => {
-            const isActive = active === item.label
+            const Icon = item.icon
             return (
-              <button
+              <RouterNavLink
                 key={item.label}
-                type="button"
-                onClick={() => setActive(item.label)}
-                className={`
-                  w-full flex items-center justify-between gap-3 px-3 py-3 rounded-lg mb-1
-                  text-sm font-medium transition-colors text-left
-                  ${isActive
-                    ? 'bg-[#E8622A] text-white'
-                    : 'text-white/80 hover:bg-white/10 hover:text-white'
-                  }
-                `}
+                to={item.path}
+                className={({ isActive }) =>
+                  `w-full flex items-center justify-between gap-3 px-3 py-3 rounded-lg mb-1 text-sm font-medium transition-colors ${
+                    isActive
+                      ? 'bg-[#E8622A] text-white'
+                      : 'text-white/80 hover:bg-white/10 hover:text-white'
+                  }`
+                }
               >
                 <span className="flex items-center gap-3">
-                  <IconLock size={16} className="shrink-0" />
+                  <Icon size={16} className="shrink-0" />
                   {item.label}
                 </span>
                 {item.hasChevron && (
                   <IconChevronDown size={14} className="shrink-0 text-white/60" />
                 )}
-              </button>
+              </RouterNavLink>
             )
           })}
         </nav>
